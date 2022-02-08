@@ -22,8 +22,3 @@ switch ($_SESSION['estado']) {
         header("Location: index.php");
         break;
 }
-
-
-echo "<br><br><pre>";
-
-var_dump($formulario);

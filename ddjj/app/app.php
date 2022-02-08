@@ -14,7 +14,7 @@ include('../modelos/formulario-class.php');
 $DB = new DB();
 
 // Contruir una variable de tiempo actual
-$DateTime = new DateTime();
+$DateTime = new DateTime('now', new DateTimeZone('America/Argentina/Buenos_Aires'));
 
 // Revisa el estado de la session, en caso de no aparecer, la crea
 if(!isset($_SESSION['estado'])) {

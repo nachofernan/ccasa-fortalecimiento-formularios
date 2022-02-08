@@ -119,24 +119,169 @@ class Formulario {
     }
 
     public function checkear_formulario() {
-        return ($this->revisar_internos() && $this->revisar_externos() && $this->descripcion != NULL);
+        $errores = 0;
+        if($this->internos == 'si') {
+            if(!$this->revisar_internos() || count($this->vinculos_internos) == 0) {
+                $errores++;
+            }
+        } else {
+            $this->vinculos_internos = array();
+        }
+        if($this->externos_1 == 'si' || 
+        $this->externos_2 == 'si' || 
+        $this->externos_3 == 'si' || 
+        $this->externos_4 == 'si') {
+            if(!$this->revisar_externos() || count($this->vinculos_externos) == 0) {
+                $errores++;
+            }
+        } else {
+            $this->vinculos_externos = array();
+        }
+        if($this->confidencial == 'si' || 
+        $this->antecedentes == 'si' || 
+        $this->otros == 'si') {
+            if($this->descripcion == '') {
+                $errores++;
+            }
+        } else {
+            $this->descripcion = '';
+        }
+        return $errores == 0 ? true : false;
     }
 
     public function revisar_internos() {
-        $retorno = true;
-        foreach($this->vinculos_internos as $key => $vinculo) {
-            if($vinculo['nombre'] != NULL){
-                
+        $internos = array();
+        $errores = 0;
+        foreach($this->vinculos_internos as $vinculo) {
+            if($vinculo['nombre'] != '' && 
+            $vinculo['apellido'] != '' &&
+            $vinculo['locacion'] != '' &&
+            $vinculo['sector'] != '' &&
+            $vinculo['vinculo'] != ''){
+                $internos[] = $vinculo;
+            } elseif($vinculo['nombre'] == '' && 
+            $vinculo['apellido'] == '' &&
+            $vinculo['locacion'] == '' &&
+            $vinculo['sector'] == '' &&
+            $vinculo['vinculo'] == '') {
+            } else {
+                $errores++;
             }
+        }
+        if(!$errores) {
+            $this->vinculos_internos = $internos;
+        }
+        return $errores == 0 ? true : false;
+    }
+
+    public function revisar_externos() {
+        $externos = array();
+        $errores = 0;
+        foreach($this->vinculos_externos as $vinculo) {
+            if($vinculo['interes'] != '' && 
+            $vinculo['nombre'] != '' &&
+            $vinculo['propiedad'] != '' &&
+            $vinculo['vinculo'] != '' &&
+            $vinculo['actual'] != ''){
+                $externos[] = $vinculo;
+            } elseif($vinculo['interes'] == '' && 
+            $vinculo['nombre'] == '' &&
+            $vinculo['propiedad'] == '' &&
+            $vinculo['vinculo'] == '' &&
+            $vinculo['actual'] == '') {
+            } else {
+                $errores++;
+            }
+        }
+        if(!$errores) {
+            $this->vinculos_externos = $externos;
+        }
+        return $errores == 0 ? true : false;
+    }
+
+    public function asignar_codigo() {
+        $db = new DB();
+        $codigo_creado = false;
+        while(!$codigo_creado) {
+            $codigo = rand(111111, 999999);
+            $existe = $db->count("select * from formularios where codigo = :codigo", ['codigo' => $codigo]);
+            if(!$existe) {
+                $codigo_creado = true;
+            }
+        }
+        $this->codigo = $codigo;
+    }
+
+    public function asignar_fecha() {
+        global $DateTime;
+        $this->fecha = $DateTime;
+    }
+
+    public function guardar_db() {
+        $db = new DB();
+        $query = "insert into formularios (id, nombre_apellido, legajo, documento, locacion, sector, internos, externos_1, externos_2, externos_3, externos_4, confidencial, antecedentes, otros, descripcion, fecha, codigo, validado) 
+        VALUES (:id, :nombre_apellido, :legajo, :documento, :locacion, :sector, :internos, :externos_1, :externos_2, :externos_3, :externos_4, :confidencial, :antecedentes, :otros, :descripcion, :fecha, :codigo, :validado)";
+        $parameters = [
+            'id' => null, 
+            'nombre_apellido' => $this->nombre_apellido, 
+            'legajo' => $this->legajo, 
+            'documento' => $this->documento, 
+            'locacion' => $this->locacion, 
+            'sector' => $this->sector, 
+            'internos' => $this->internos, 
+            'externos_1' => $this->externos_1, 
+            'externos_2' => $this->externos_2, 
+            'externos_3' => $this->externos_3, 
+            'externos_4' => $this->externos_4, 
+            'confidencial' => $this->confidencial, 
+            'antecedentes' => $this->antecedentes, 
+            'otros' => $this->otros, 
+            'descripcion' => $this->descripcion, 
+            'fecha' => $this->fecha->format('Y-m-d H:i:s'), 
+            'codigo' => $this->codigo, 
+            'validado' => 'no'
+        ];
+        $db->insert($query, $parameters);
+        $id = $db->fetch("select * from formularios where codigo = :codigo", ['codigo' => $this->codigo]);
+        $this->id = $id['id'];
+        foreach($this->vinculos_internos as $vinculo) {
+            $this->guardar_vinculo_interno($vinculo);
+        }
+        foreach($this->vinculos_externos as $vinculo) {
+            $this->guardar_vinculo_externo($vinculo);
         }
     }
-    public function revisar_externos() {
-        $retorno = true;
-        foreach($this->vinculos_internos as $key => $vinculo) {
-            if($vinculo['nombre'] != NULL){
 
-            }
-        }
+    public function guardar_vinculo_interno($vinculo) {
+        $db = new DB();
+        $query = "insert into internos (id, nombre, apellido, locacion, sector, vinculo, formulario_id) 
+            values (:id, :nombre, :apellido, :locacion, :sector, :vinculo, :formulario_id)";
+        $parameters = [
+            'id' => null, 
+            'nombre' => $vinculo['nombre'], 
+            'apellido' => $vinculo['apellido'], 
+            'locacion' => $vinculo['locacion'], 
+            'sector' => $vinculo['sector'], 
+            'vinculo' => $vinculo['vinculo'], 
+            'formulario_id' => $this->id
+        ];    
+        $db->insert($query, $parameters);
+    }
+
+    public function guardar_vinculo_externo($vinculo) {
+        $db = new DB();
+        $query = "insert into externos (id, interes, nombre, propiedad, vinculo, actual, formulario_id) 
+            values (:id, :interes, :nombre, :propiedad, :vinculo, :actual, :formulario_id)";
+        $parameters = [
+            'id' => null, 
+            'interes' => $vinculo['interes'], 
+            'nombre' => $vinculo['nombre'], 
+            'propiedad' => $vinculo['propiedad'], 
+            'vinculo' => $vinculo['vinculo'], 
+            'actual' => $vinculo['actual'], 
+            'formulario_id' => $this->id
+        ];    
+        $db->insert($query, $parameters);
     }
 
 }

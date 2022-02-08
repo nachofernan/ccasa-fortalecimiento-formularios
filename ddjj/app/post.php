@@ -34,10 +34,10 @@ if($_SESSION['estado'] == 1 && isset($_POST['volver'])) {
 if($_SESSION['estado'] == 1 && isset($_POST['previsualizar'])) { 
     
     $formulario->completar_formulario($_POST);
-    actualizar_formulario($formulario);
 
     if($formulario->checkear_formulario()) {
         actualizar_estado(2);
+        actualizar_formulario($formulario);
     }
     /* 
 
@@ -112,13 +112,21 @@ if($_SESSION['estado'] == 1 && isset($_POST['previsualizar'])) {
 
 // Volver a la edición del formulario
 if($_SESSION['estado'] == 2 && isset($_POST['volver'])) { 
-    $_SESSION['estado'] = 1;
-    actualizar();
+    actualizar_estado(1);
+    /* $_SESSION['estado'] = 1;
+    actualizar(); */
 }
 
 // Se graba el formulario en la base de datos
 if($_SESSION['estado'] == 2 && isset($_POST['guardar'])) { 
 
+    $formulario->asignar_codigo();
+    $formulario->asignar_fecha();
+    $formulario->guardar_db();
+    actualizar_estado(3);
+    actualizar_formulario($formulario);
+
+/* 
     // Generar código
     $codigo = crear_codigo();
     $_SESSION['codigo'] = $codigo;
@@ -145,7 +153,7 @@ if($_SESSION['estado'] == 2 && isset($_POST['guardar'])) {
 
     $formulario = $db->fetch("select * from formularios where codigo = $codigo");
 
-    /** Se revisa y se cargan todos los vinculos que tenga */
+    // Se revisa y se cargan todes los vinculos que tenga
     if($post['internos'] == 'si') { 
         if (
             check_isset_notnull('nombre_vi1') && 
@@ -316,7 +324,8 @@ if($_SESSION['estado'] == 2 && isset($_POST['guardar'])) {
             $db->insert($query);
         }
     }
-
+ 
     $_SESSION['estado'] = 3;
     actualizar();
+    */
 }

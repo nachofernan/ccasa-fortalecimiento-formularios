@@ -13,7 +13,7 @@
                     <div class="alert alert-success">
                     El formulario quedó guardado en la base de datos.<br>Por favor, anote y guarde el siguiente código en un lugar seguro:
                             <hr>
-                        <h2 class="font-weight-bold" style="letter-spacing: 10px;"><?php echo $_SESSION['codigo']; ?></h2>
+                        <h2 class="font-weight-bold" style="letter-spacing: 10px;"><?php echo $formulario->codigo; ?></h2>
                     </div>
                 </div>
             </div>
@@ -28,4 +28,6 @@
             <p>Puede cerrar esta página. Muchas gracias por su colaboración.</p>
         </div>
     </div>
+
+    <a href="borrar.php">SALIR</a>
 </div>
