@@ -45,7 +45,7 @@
                     Nombre y Apellido
                 </div>
                 <div class="col">
-                    <input type="text" class="form-control" form="FortForm" disabled required value="<?php echo $_SESSION['ddjj']['nombre_apellido']; ?>">
+                    <input type="text" class="form-control" form="FortForm" disabled required value="<?php echo $formulario->nombre_apellido; ?>">
                 </div>
             </div>
             <div class="row py-2">
@@ -53,7 +53,7 @@
                     Legajo
                 </div>
                 <div class="col">
-                    <input type="text" class="form-control" form="FortForm" disabled required value="<?php echo $_SESSION['ddjj']['legajo']; ?>">
+                    <input type="text" class="form-control" form="FortForm" disabled required value="<?php echo $formulario->legajo; ?>">
                 </div>
             </div>
             <div class="row py-2">
@@ -61,7 +61,7 @@
                     Documento
                 </div>
                 <div class="col">
-                    <input type="text" class="form-control" form="FortForm" disabled required value="<?php echo $_SESSION['ddjj']['documento']; ?>">
+                    <input type="text" class="form-control" form="FortForm" disabled required value="<?php echo $formulario->documento; ?>">
                 </div>
             </div>
             <div class="row py-2">
@@ -69,7 +69,7 @@
                 Lugar de Trabajo <small>(Adm. Central/Centrales Eléctricas)</small>
                 </div>
                 <div class="col">
-                    <input type="text" class="form-control" form="FortForm" disabled required value="<?php echo $_SESSION['ddjj']['locacion']; ?>">
+                    <input type="text" class="form-control" form="FortForm" disabled required value="<?php echo $formulario->locacion; ?>">
                 </div>
             </div>
             <div class="row py-2">
@@ -77,7 +77,7 @@
                 Gerencia, Área o Sector
                 </div>
                 <div class="col">
-                    <input type="text" name="sector" class="form-control" form="FortForm" required value="<?php if(isset($_SESSION['post']['sector'])){echo $_SESSION['post']['sector'];} ?>">
+                    <input type="text" name="sector" class="form-control" form="FortForm" required value="<?php echo $formulario->sector; ?>">
                 </div>
             </div>
         </div>
@@ -98,10 +98,10 @@
                     ¿Tiene usted familiares directos trabajando en CCA? 
                 </div>
                 <div class="col-2">
-                    SI <input type="radio" name="internos" value="si"  form="FortForm" required <?php if(isset($_SESSION['post']['internos']) && $_SESSION['post']['internos'] == 'si'){echo 'checked';} ?>/>
+                    SI <input type="radio" name="internos" value="si"  form="FortForm" required <?php echo $formulario->internos == 'si' ? 'checked' : ''; ?>/>
                 </div>
                 <div class="col-2">
-                    NO <input type="radio" name="internos" value="no"  form="FortForm" required <?php if(isset($_SESSION['post']['internos']) && $_SESSION['post']['internos'] == 'no'){echo 'checked';} ?>/>
+                    NO <input type="radio" name="internos" value="no"  form="FortForm" required <?php  echo $formulario->internos == 'no' ? 'checked' : ''  ?>/>
                 </div>
             </div>
             <div class="row py-2">
@@ -117,133 +117,32 @@
                 Si la respuesta es SI, por favor complete el siguiente cuadro con los datos de la/s persona/s con quien tenga vínculo
                 </div>
             </div>
-            <?php if(isset($_GET['mensaje']) && $_GET['mensaje'] == "Faltan datos del Vínculo Interno") { ?>
+            <?php for ($i=0; $i < 5; $i++) { ?>
+            <div class="row small pt-2">
+                <div class="col-10 offset-1 border-bottom pb-2">
+                    <div class="row py-1">
+                        <div class="col">Nombre</div>
+                        <div class="col"><input type="text" name="interno[<?php echo $i; ?>][nombre]" id="nombre" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($formulario->vinculos_internos[$i])){echo $formulario->vinculos_internos[$i]['nombre'];} ?>"></div>
+                    </div>
+                    <div class="row py-1">
+                        <div class="col">Apellido</div>
+                        <div class="col"><input type="text" name="interno[<?php echo $i; ?>][apellido]" id="apellido" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($formulario->vinculos_internos[$i])){echo $formulario->vinculos_internos[$i]['apellido'];} ?>"></div>
+                    </div>
+                    <div class="row py-1">
+                        <div class="col">Lugar de Trabajo <small>(Adm. Central/Centrales Eléctricas)</small></div>
+                        <div class="col"><input type="text" name="interno[<?php echo $i; ?>][locacion]" id="locacion" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($formulario->vinculos_internos[$i])){echo $formulario->vinculos_internos[$i]['locacion'];} ?>"></div>
+                    </div>
+                    <div class="row py-1">
+                        <div class="col">Gerencia/Área/Sector</div>
+                        <div class="col"><input type="text" name="interno[<?php echo $i; ?>][sector]" id="sector" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($formulario->vinculos_internos[$i])){echo $formulario->vinculos_internos[$i]['sector'];}  ?>"></div>
+                    </div>
+                    <div class="row py-1">
+                        <div class="col">Vínculo</div>
+                        <div class="col"><input type="text" name="interno[<?php echo $i; ?>][vinculo]" id="vinculo" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($formulario->vinculos_internos[$i])){echo $formulario->vinculos_internos[$i]['vinculo'];}  ?>"></div>
+                    </div>
+                </div>
             </div>
             <?php } ?>
-            <div class="row small pt-2">
-                <div class="col-10 offset-1 border-bottom pb-2">
-                    <div class="row py-1">
-                        <div class="col">Nombre</div>
-                        <div class="col"><input type="text" name="nombre_vi1" id="nombre" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['nombre_vi1'])){echo $_SESSION['post']['nombre_vi1'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Apellido</div>
-                        <div class="col"><input type="text" name="apellido_vi1" id="apellido" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['apellido_vi1'])){echo $_SESSION['post']['apellido_vi1'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Lugar de Trabajo <small>(Adm. Central/Centrales Eléctricas)</small></div>
-                        <div class="col"><input type="text" name="locacion_vi1" id="locacion" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['locacion_vi1'])){echo $_SESSION['post']['locacion_vi1'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Gerencia/Área/Sector</div>
-                        <div class="col"><input type="text" name="sector_vi1" id="sector" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['sector_vi1'])){echo $_SESSION['post']['sector_vi1'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Vínculo</div>
-                        <div class="col"><input type="text" name="vinculo_vi1" id="vinculo" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['vinculo_vi1'])){echo $_SESSION['post']['vinculo_vi1'];} ?>"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row small pt-2">
-                <div class="col-10 offset-1 border-bottom pb-2">
-                    <div class="row py-1">
-                        <div class="col">Nombre</div>
-                        <div class="col"><input type="text" name="nombre_vi2" id="nombre" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['nombre_vi2'])){echo $_SESSION['post']['nombre_vi2'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Apellido</div>
-                        <div class="col"><input type="text" name="apellido_vi2" id="apellido" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['apellido_vi2'])){echo $_SESSION['post']['apellido_vi2'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Lugar de Trabajo <small>(Adm. Central/Centrales Eléctricas)</small></div>
-                        <div class="col"><input type="text" name="locacion_vi2" id="locacion" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['locacion_vi2'])){echo $_SESSION['post']['locacion_vi2'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Gerencia/Área/Sector</div>
-                        <div class="col"><input type="text" name="sector_vi2" id="sector" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['sector_vi2'])){echo $_SESSION['post']['sector_vi2'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Vínculo</div>
-                        <div class="col"><input type="text" name="vinculo_vi2" id="vinculo" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['vinculo_vi2'])){echo $_SESSION['post']['vinculo_vi2'];} ?>"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row small pt-2">
-                <div class="col-10 offset-1 border-bottom pb-2">
-                    <div class="row py-1">
-                        <div class="col">Nombre</div>
-                        <div class="col"><input type="text" name="nombre_vi3" id="nombre" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['nombre_vi3'])){echo $_SESSION['post']['nombre_vi3'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Apellido</div>
-                        <div class="col"><input type="text" name="apellido_vi3" id="apellido" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['apellido_vi3'])){echo $_SESSION['post']['apellido_vi3'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Lugar de Trabajo <small>(Adm. Central/Centrales Eléctricas)</small></div>
-                        <div class="col"><input type="text" name="locacion_vi3" id="locacion" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['locacion_vi3'])){echo $_SESSION['post']['locacion_vi3'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Gerencia/Área/Sector</div>
-                        <div class="col"><input type="text" name="sector_vi3" id="sector" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['sector_vi3'])){echo $_SESSION['post']['sector_vi3'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Vínculo</div>
-                        <div class="col"><input type="text" name="vinculo_vi3" id="vinculo" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['vinculo_vi3'])){echo $_SESSION['post']['vinculo_vi3'];} ?>"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row small pt-2">
-                <div class="col-10 offset-1 border-bottom pb-2">
-                    <div class="row py-1">
-                        <div class="col">Nombre</div>
-                        <div class="col"><input type="text" name="nombre_vi4" id="nombre" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['nombre_vi4'])){echo $_SESSION['post']['nombre_vi4'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Apellido</div>
-                        <div class="col"><input type="text" name="apellido_vi4" id="apellido" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['apellido_vi4'])){echo $_SESSION['post']['apellido_vi4'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Lugar de Trabajo <small>(Adm. Central/Centrales Eléctricas)</small></div>
-                        <div class="col"><input type="text" name="locacion_vi4" id="locacion" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['locacion_vi4'])){echo $_SESSION['post']['locacion_vi4'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Gerencia/Área/Sector</div>
-                        <div class="col"><input type="text" name="sector_vi4" id="sector" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['sector_vi4'])){echo $_SESSION['post']['sector_vi4'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Vínculo</div>
-                        <div class="col"><input type="text" name="vinculo_vi4" id="vinculo" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['vinculo_vi4'])){echo $_SESSION['post']['vinculo_vi4'];} ?>"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row small pt-2">
-                <div class="col-10 offset-1 pb-2">
-                    <div class="row py-1">
-                        <div class="col">Nombre</div>
-                        <div class="col"><input type="text" name="nombre_vi5" id="nombre" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['nombre_vi5'])){echo $_SESSION['post']['nombre_vi5'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Apellido</div>
-                        <div class="col"><input type="text" name="apellido_vi5" id="apellido" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['apellido_vi5'])){echo $_SESSION['post']['apellido_vi5'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Lugar de Trabajo <small>(Adm. Central/Centrales Eléctricas)</small></div>
-                        <div class="col"><input type="text" name="locacion_vi5" id="locacion" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['locacion_vi5'])){echo $_SESSION['post']['locacion_vi5'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Gerencia/Área/Sector</div>
-                        <div class="col"><input type="text" name="sector_vi5" id="sector" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['sector_vi5'])){echo $_SESSION['post']['sector_vi5'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Vínculo</div>
-                        <div class="col"><input type="text" name="vinculo_vi5" id="vinculo" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['vinculo_vi5'])){echo $_SESSION['post']['vinculo_vi5'];} ?>"></div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -262,10 +161,10 @@
                 ¿Usted o alguien de su familia tiene algún interés económico, financiero, de propiedad o de algún otro tipo, en una persona humana o jurídica proveedora, contratista o tercera parte que se encuentre vinculada al ámbito de las actividades de CCA pudiendo constituir un conflicto de intereses, ya sea real, potencial o aparente? 
                 </div>
                 <div class="col-2">
-                    SI <input type="radio" name="externos_1" value="si" form="FortForm" required  <?php if(isset($_SESSION['post']['externos_1']) && $_SESSION['post']['externos_1'] == 'si'){echo 'checked';} ?>/>
+                    SI <input type="radio" name="externos_1" value="si" form="FortForm" required  <?php echo $formulario->externos_1 == 'si' ? 'checked' : ''; ?> />
                 </div>
                 <div class="col-2">
-                    NO <input type="radio" name="externos_1" value="no" form="FortForm" required  <?php if(isset($_SESSION['post']['externos_1']) && $_SESSION['post']['externos_1'] == 'no'){echo 'checked';} ?>/>
+                    NO <input type="radio" name="externos_1" value="no" form="FortForm" required  <?php echo $formulario->externos_1 == 'no' ? 'checked' : ''; ?> />
                 </div>
             </div>
             <div class="row pt-2">
@@ -273,10 +172,10 @@
                 ¿Tiene usted familiares directos desempeñando actividades laborales en empresas de proveedores, contratistas, subcontratistas o en entes reguladores públicos que interactúen en ejercicio de sus funciones con CCA?
                 </div>
                 <div class="col-2">
-                    SI <input type="radio" name="externos_2" value="si" form="FortForm" required  <?php if(isset($_SESSION['post']['externos_2']) && $_SESSION['post']['externos_2'] == 'si'){echo 'checked';} ?>/>
+                    SI <input type="radio" name="externos_2" value="si" form="FortForm" required  <?php echo $formulario->externos_2 == 'si' ? 'checked' : ''; ?> />
                 </div>
                 <div class="col-2">
-                    NO <input type="radio" name="externos_2" value="no" form="FortForm" required  <?php if(isset($_SESSION['post']['externos_2']) && $_SESSION['post']['externos_2'] == 'no'){echo 'checked';} ?>/>
+                    NO <input type="radio" name="externos_2" value="no" form="FortForm" required  <?php echo $formulario->externos_2 == 'no' ? 'checked' : ''; ?> />
                 </div>
             </div>
             <div class="row pt-2">
@@ -284,10 +183,10 @@
                 ¿Usted ha trabajado en los últimos tres años o ha tenido algún tipo de relación contractual con alguna persona humana o jurídica que sea proveedor, contratista, subcontratista o tercera parte vinculada a CCA o que represente a este tipo de personas?
                 </div>
                 <div class="col-2">
-                    SI <input type="radio" name="externos_3" value="si" form="FortForm" required  <?php if(isset($_SESSION['post']['externos_3']) && $_SESSION['post']['externos_3'] == 'si'){echo 'checked';} ?>/>
+                    SI <input type="radio" name="externos_3" value="si" form="FortForm" required  <?php echo $formulario->externos_3 == 'si' ? 'checked' : ''; ?> />
                 </div>
                 <div class="col-2">
-                    NO <input type="radio" name="externos_3" value="no" form="FortForm" required  <?php if(isset($_SESSION['post']['externos_3']) && $_SESSION['post']['externos_3'] == 'no'){echo 'checked';} ?>/>
+                    NO <input type="radio" name="externos_3" value="no" form="FortForm" required  <?php echo $formulario->externos_3 == 'no' ? 'checked' : ''; ?> />
                 </div>
             </div>
             <div class="row py-2">
@@ -295,10 +194,10 @@
                 ¿Es usted miembro de algún directorio, consejo de administración u otro órgano societario o social diferente de CCA?
                 </div>
                 <div class="col-2">
-                    SI <input type="radio" name="externos_4" value="si" form="FortForm" required  <?php if(isset($_SESSION['post']['externos_4']) && $_SESSION['post']['externos_4'] == 'si'){echo 'checked';} ?>/>
+                    SI <input type="radio" name="externos_4" value="si" form="FortForm" required  <?php echo $formulario->externos_4 == 'si' ? 'checked' : ''; ?> />
                 </div>
                 <div class="col-2">
-                    NO <input type="radio" name="externos_4" value="no" form="FortForm" required  <?php if(isset($_SESSION['post']['externos_4']) && $_SESSION['post']['externos_4'] == 'no'){echo 'checked';} ?>/>
+                    NO <input type="radio" name="externos_4" value="no" form="FortForm" required  <?php echo $formulario->externos_4 == 'no' ? 'checked' : ''; ?> />
                 </div>
             </div>
             <?php if(isset($_GET['mensaje']) && $_GET['mensaje'] == "Faltan datos de los Vínculos Externos") { ?>
@@ -312,126 +211,32 @@
             <?php if(isset($_GET['mensaje']) && $_GET['mensaje'] == "Faltan datos de los Vínculos Externos") { ?>
             </div>
             <?php } ?>
+            <?php for ($i=0; $i < 5; $i++) { ?>
             <div class="row small pt-2">
                 <div class="col-10 offset-1 border-bottom pb-2">
                     <div class="row py-1">
                         <div class="col">Tipo de Interés</div>
-                        <div class="col"><input type="text" name="interes_ve1" id="nombre" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['interes_ve1'])){echo $_SESSION['post']['interes_ve1'];} ?>"></div>
+                        <div class="col"><input type="text" name="externo[<?php echo $i; ?>][interes]" id="nombre" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($formulario->vinculos_externos[$i])){echo $formulario->vinculos_externos[$i]['interes'];} ?>"></div>
                     </div>
                     <div class="row py-1">
                         <div class="col">Nombre y Apellido o Razón Social</div>
-                        <div class="col"><input type="text" name="nombre_ve1" id="apellido" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['nombre_ve1'])){echo $_SESSION['post']['nombre_ve1'];} ?>"></div>
+                        <div class="col"><input type="text" name="externo[<?php echo $i; ?>][nombre]" id="apellido" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($formulario->vinculos_externos[$i])){echo $formulario->vinculos_externos[$i]['nombre'];} ?>"></div>
                     </div>
                     <div class="row py-1">
                         <div class="col">Tipo de Propiedad</div>
-                        <div class="col"><input type="text" name="propiedad_ve1" id="locacion" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['propiedad_ve1'])){echo $_SESSION['post']['propiedad_ve1'];} ?>"></div>
+                        <div class="col"><input type="text" name="externo[<?php echo $i; ?>][propiedad]" id="locacion" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($formulario->vinculos_externos[$i])){echo $formulario->vinculos_externos[$i]['propiedad'];} ?>"></div>
                     </div>
                     <div class="row py-1">
                         <div class="col">Tipo de Vínculo</div>
-                        <div class="col"><input type="text" name="vinculo_ve1" id="sector" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['vinculo_ve1'])){echo $_SESSION['post']['vinculo_ve1'];} ?>"></div>
+                        <div class="col"><input type="text" name="externo[<?php echo $i; ?>][vinculo]" id="sector" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($formulario->vinculos_externos[$i])){echo $formulario->vinculos_externos[$i]['vinculo'];} ?>"></div>
                     </div>
                     <div class="row py-1">
                         <div class="col">¿Se trata de un interés actual?</div>
-                        <div class="col"><input type="text" name="actual_ve1" id="vinculo" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['actual_ve1'])){echo $_SESSION['post']['actual_ve1'];} ?>"></div>
+                        <div class="col"><input type="text" name="externo[<?php echo $i; ?>][actual]" id="vinculo" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($formulario->vinculos_externos[$i])){echo $formulario->vinculos_externos[$i]['actual'];} ?>"></div>
                     </div>
                 </div>
             </div>
-            <div class="row small pt-2">
-                <div class="col-10 offset-1 border-bottom pb-2">
-                    <div class="row py-1">
-                        <div class="col">Tipo de Interés</div>
-                        <div class="col"><input type="text" name="interes_ve2" id="nombre" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['interes_ve2'])){echo $_SESSION['post']['interes_ve2'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Nombre y Apellido o Razón Social</div>
-                        <div class="col"><input type="text" name="nombre_ve2" id="apellido" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['nombre_ve2'])){echo $_SESSION['post']['nombre_ve2'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Tipo de Propiedad</div>
-                        <div class="col"><input type="text" name="propiedad_ve2" id="locacion" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['propiedad_ve2'])){echo $_SESSION['post']['propiedad_ve2'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Tipo de Vínculo</div>
-                        <div class="col"><input type="text" name="vinculo_ve2" id="sector" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['vinculo_ve2'])){echo $_SESSION['post']['vinculo_ve2'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">¿Se trata de un interés actual?</div>
-                        <div class="col"><input type="text" name="actual_ve2" id="vinculo" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['actual_ve2'])){echo $_SESSION['post']['actual_ve2'];} ?>"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="row small pt-2">
-                <div class="col-10 offset-1 border-bottom pb-2">
-                    <div class="row py-1">
-                        <div class="col">Tipo de Interés</div>
-                        <div class="col"><input type="text" name="interes_ve3" id="nombre" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['interes_ve3'])){echo $_SESSION['post']['interes_ve3'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Nombre y Apellido o Razón Social</div>
-                        <div class="col"><input type="text" name="nombre_ve3" id="apellido" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['nombre_ve3'])){echo $_SESSION['post']['nombre_ve3'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Tipo de Propiedad</div>
-                        <div class="col"><input type="text" name="propiedad_ve3" id="locacion" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['propiedad_ve3'])){echo $_SESSION['post']['propiedad_ve3'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Tipo de Vínculo</div>
-                        <div class="col"><input type="text" name="vinculo_ve3" id="sector" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['vinculo_ve3'])){echo $_SESSION['post']['vinculo_ve3'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">¿Se trata de un interés actual?</div>
-                        <div class="col"><input type="text" name="actual_ve3" id="vinculo" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['actual_ve3'])){echo $_SESSION['post']['actual_ve3'];} ?>"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="row small pt-2">
-                <div class="col-10 offset-1 border-bottom pb-2">
-                    <div class="row py-1">
-                        <div class="col">Tipo de Interés</div>
-                        <div class="col"><input type="text" name="interes_ve4" id="nombre" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['interes_ve4'])){echo $_SESSION['post']['interes_ve4'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Nombre y Apellido o Razón Social</div>
-                        <div class="col"><input type="text" name="nombre_ve4" id="apellido" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['nombre_ve4'])){echo $_SESSION['post']['nombre_ve4'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Tipo de Propiedad</div>
-                        <div class="col"><input type="text" name="propiedad_ve4" id="locacion" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['propiedad_ve4'])){echo $_SESSION['post']['propiedad_ve4'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Tipo de Vínculo</div>
-                        <div class="col"><input type="text" name="vinculo_ve4" id="sector" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['vinculo_ve4'])){echo $_SESSION['post']['vinculo_ve4'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">¿Se trata de un interés actual?</div>
-                        <div class="col"><input type="text" name="actual_ve4" id="vinculo" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['actual_ve4'])){echo $_SESSION['post']['actual_ve4'];} ?>"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="row small pt-2">
-                <div class="col-10 offset-1 pb-2">
-                    <div class="row py-1">
-                        <div class="col">Tipo de Interés</div>
-                        <div class="col"><input type="text" name="interes_ve5" id="nombre" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['interes_ve5'])){echo $_SESSION['post']['interes_ve5'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Nombre y Apellido o Razón Social</div>
-                        <div class="col"><input type="text" name="nombre_ve5" id="apellido" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['nombre_ve5'])){echo $_SESSION['post']['nombre_ve5'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Tipo de Propiedad</div>
-                        <div class="col"><input type="text" name="propiedad_ve5" id="locacion" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['propiedad_ve5'])){echo $_SESSION['post']['propiedad_ve5'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">Tipo de Vínculo</div>
-                        <div class="col"><input type="text" name="vinculo_ve5" id="sector" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['vinculo_ve5'])){echo $_SESSION['post']['vinculo_ve5'];} ?>"></div>
-                    </div>
-                    <div class="row py-1">
-                        <div class="col">¿Se trata de un interés actual?</div>
-                        <div class="col"><input type="text" name="actual_ve5" id="vinculo" class="form-control form-control-sm" form="FortForm" value="<?php if(isset($_SESSION['post']['actual_ve5'])){echo $_SESSION['post']['actual_ve5'];} ?>"></div>
-                    </div>
-                </div>
-            </div>
+            <?php } ?>
         </div>
     </div>
 
@@ -450,10 +255,10 @@
                     ¿Ha revelado usted de manera consciente cualquier tipo de información confidencial acerca de CCA a personas ajenas a la Empresa?
                 </div>
                 <div class="col-2">
-                    SI <input type="radio" name="confidencial" value="si" form="FortForm" required  <?php if(isset($_SESSION['post']['confidencial']) && $_SESSION['post']['confidencial'] == 'si'){echo 'checked';} ?>/>
+                    SI <input type="radio" name="confidencial" value="si" form="FortForm" required  <?php echo $formulario->confidencial == 'si' ? 'checked' : ''; ?> />
                 </div>
                 <div class="col-2">
-                    NO <input type="radio" name="confidencial" value="no" form="FortForm" required  <?php if(isset($_SESSION['post']['confidencial']) && $_SESSION['post']['confidencial'] == 'no'){echo 'checked';} ?>/>
+                    NO <input type="radio" name="confidencial" value="no" form="FortForm" required  <?php echo $formulario->confidencial == 'no' ? 'checked' : ''; ?> />
                 </div>
             </div>
         </div>
@@ -474,10 +279,10 @@
                     ¿Ha sido usted personalmente objeto de una auditoría, investigación, proceso judicial o actividad similar por motivos o hechos de corrupción?
                 </div>
                 <div class="col-2">
-                    SI <input type="radio" name="antecedentes" value="si" form="FortForm" required  <?php if(isset($_SESSION['post']['antecedentes']) && $_SESSION['post']['antecedentes'] == 'si'){echo 'checked';} ?>/>
+                    SI <input type="radio" name="antecedentes" value="si" form="FortForm" required  <?php echo $formulario->antecedentes == 'si' ? 'checked' : ''; ?> />
                 </div>
                 <div class="col-2">
-                    NO <input type="radio" name="antecedentes" value="no" form="FortForm" required  <?php if(isset($_SESSION['post']['antecedentes']) && $_SESSION['post']['antecedentes'] == 'no'){echo 'checked';} ?>/>
+                    NO <input type="radio" name="antecedentes" value="no" form="FortForm" required  <?php echo $formulario->antecedentes == 'no' ? 'checked' : ''; ?> />
                 </div>
             </div>
         </div>
@@ -498,10 +303,10 @@
                     ¿Existe alguna otra circunstancia que pueda afectar o que pueda percibirse que afecta su objetividad e independencia en el desempeño de sus funciones en CCA?
                 </div>
                 <div class="col-2">
-                    SI <input type="radio" name="otros" value="si" form="FortForm" required  <?php if(isset($_SESSION['post']['otros']) && $_SESSION['post']['otros'] == 'si'){echo 'checked';} ?>/>
+                    SI <input type="radio" name="otros" value="si" form="FortForm" required  <?php echo $formulario->otros == 'si' ? 'checked' : ''; ?> />
                 </div>
                 <div class="col-2">
-                    NO <input type="radio" name="otros" value="no" form="FortForm" required  <?php if(isset($_SESSION['post']['otros']) && $_SESSION['post']['otros'] == 'no'){echo 'checked';} ?>/>
+                    NO <input type="radio" name="otros" value="no" form="FortForm" required  <?php echo $formulario->otros == 'no' ? 'checked' : ''; ?> />
                 </div>
             </div>
         </div>
@@ -523,7 +328,7 @@
             <?php } ?>
             <div class="row small pt-4">
                 <div class="col-10 pb-2">
-                    <textarea name="descripcion" id="descripcion" rows="8" class="form-control" form="FortForm"><?php if(isset($_SESSION['post']['descripcion'])){echo $_SESSION['post']['descripcion'];} ?></textarea>
+                    <textarea name="descripcion" id="descripcion" rows="8" class="form-control" form="FortForm"><?php echo $formulario->descripcion; ?></textarea>
                 </div>
             </div>
         </div>

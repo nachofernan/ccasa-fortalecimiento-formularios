@@ -5,7 +5,15 @@ function actualizar() {
     die();
 }
 
-function armar_vista(string $archivo) {
+function actualizar_estado(int $estado) {
+    $_SESSION['estado'] = $estado;
+}
+
+function actualizar_formulario(Formulario $formulario) {
+    $_SESSION['formulario'] = serialize($formulario);
+}
+
+function armar_vista(string $archivo, Formulario $formulario = null) {
     include('vistas/default/header.php');
     include('vistas/' . $archivo . '.php');
     include('vistas/default/header.php');
